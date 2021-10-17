@@ -64,7 +64,7 @@ Mandatory options:
 2) --adapter - sequence of the adapter used for PCR. For details, see https://github.com/shelkmike/NTproc.
 
 ###########################################
-Additional options:
+Additional option:
 3) --output_folder - the folder to write results to. The default value is "NTproc_results".
 
 ###########################################
