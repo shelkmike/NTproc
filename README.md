@@ -33,4 +33,4 @@ To check whether NTproc works correctly, you can use a test set of 10 000 reads 
 `bash ntproc.sh --fastq ./Test_set/10000_reads.fastq --adapter AAGCAGTGGTATCAACGCAGAGT --output_folder Test_results`<br>
 
 ### Performance
-NTproc utilizes a single CPU thread and is capable of processing 1 000 000 reads in approximately an hour. If a faster performance is required, a user can split the input FASTQ file into batches and run several instances of NTproc independently. If you would like NTproc to have integrated parallelization, notify me via issues (https://github.com/shelkmike/NTProc/issues).
+NTproc utilizes a single CPU thread and is capable of processing 1 000 000 reads in approximately an hour. If a faster performance is required, a user can split the input FASTQ file into batches and run several instances of NTproc independently. If you would like NTproc to have integrated parallelization, notify me via Issues (https://github.com/shelkmike/NTProc/issues).
