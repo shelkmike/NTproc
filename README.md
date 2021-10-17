@@ -27,7 +27,7 @@ BC02.fastq<br>
 BC03.fastq<br>
 none.fastq<br>
 <br>
-Files titled like BC01.fastq, BC02.fastq, BC03.fastq contain processed reads with Nanopore barcodes "Barcode 1", "Barcode 2", "Barcode 3", while the file none.fastq contain reads where Modified_porechop wasn't able to find a barcode. NTproc knows standard Nanopore barcodes from "Barcode 1" to "Barcode 96".<br>
+Files titled like BC01.fastq, BC02.fastq, BC03.fastq contain processed reads with Nanopore barcodes "Barcode 1", "Barcode 2", "Barcode 3", while the file none.fastq contains reads where Modified_porechop wasn't able to find a barcode. NTproc knows standard Nanopore barcodes from "Barcode 1" to "Barcode 96".<br>
 <br>
 To check whether NTproc works correctly, you can use a test set of 10 000 reads (file 10000_reads.fastq), provided with NTproc. Run a test with a command like<br>
 `bash ntproc.sh --fastq ./Test_set/10000_reads.fastq --adapter AAGCAGTGGTATCAACGCAGAGT --output_folder Test_results`<br>
