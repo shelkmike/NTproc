@@ -3,7 +3,8 @@
 
 
 ### Installation
-Download the latest release from https://github.com/shelkmike/NTproc/releases and extract the archive.
+Simply download the files using the command<br>
+`git clone https://github.com/shelkmike/NTproc`
 
 ### Requirements
 * Modified_porechop (https://github.com/shelkmike/Modified_porechop) should be installed and available through $PATH .
