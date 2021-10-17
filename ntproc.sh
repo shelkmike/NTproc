@@ -7,7 +7,7 @@ ntproc_version=1.2
 #Step 0. Getting command line arguments and checking whether all required programs are in $PATH.
 
 #The default values.
-number_of_cpu_threads_to_use=10
+number_of_cpu_threads_to_use=1 #Porechop is poorly parallelized, so NTproc always uses one thread (really, there is almost no difference whether is uses one thread or a hundred threads). To parallelize NTproc, it's better for a user to split the input FASTQ file into batches and process them separately. NTproc has a parameter "--threads", but I hide it from a user (it's mentioned neither in --help, nor in Github), because it has almost no effect.
 path_to_the_output_folder="NTproc_results"
 path_to_the_input_fastq="empty"
 pcr_adapter_sequence="empty"
@@ -65,17 +65,16 @@ Mandatory options:
 
 ###########################################
 Additional options:
-3) --threads - Number of CPU threads to use. The default value is 10.
-4) --output_folder - the folder to write results to. The default value is "NTproc_results".
+3) --output_folder - the folder to write results to. The default value is "NTproc_results".
 
 ###########################################
 Descriptive options:
-5) --help - Print this help.
-6) --version - Print the version of NTproc.
+4) --help - Print this help.
+5) --version - Print the version of NTproc.
 
 ###########################################
 Example:
-bash ntproc.sh --fastq unprocessed_nanopore_reads.fastq --adapter AAGCAGTGGTATCAACGCAGAGT --threads 20
+bash ntproc.sh --fastq unprocessed_nanopore_reads.fastq --adapter AAGCAGTGGTATCAACGCAGAGT
 
 EOF
 exit
