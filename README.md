@@ -18,7 +18,7 @@ The additional options are:<br>
 3\) --threads — the number of CPU threads to use. The default value is 10.<br>
 4\) --output_folder — the folder to write results to. The default value is "NTproc_results".<br>
 <br>
-An example on how to run NTproc:<br>
+An example of how to run NTproc:<br>
 `bash ntproc.sh --fastq unprocessed_nanopore_reads.fastq --adapter AAGCAGTGGTATCAACGCAGAGT --threads 20`<br>
 <br>
 In the output folder of NTproc, aside from some intermediate files and folders, you'll see the folder "Demultiplexed" with a content like this:<br>
