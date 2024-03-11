@@ -1,6 +1,5 @@
-<b>NTproc</b> is a pipeline for <b>N</b>anopore <b>T</b>ranscriptome reads <b>proc</b>essing. It was created to increase the proportion of reads that correspond to entire (non-fragmented) cDNAs and also to rotate reads such that their poly-A tails become on the right (3') end of reads. In addition, NTproc trims adapters and performs demultiplexing.<br><br>
-<b>[a more detailed description including a diagram will be added after the corresponding paper is published]</b>
-
+<b>NTproc</b> is a pipeline for <b>N</b>anopore <b>T</b>ranscriptome reads <b>proc</b>essing. The main function of NTproc is removal of reads that correspond to fragmented cDNAs. NTproc supposes that a read corresponds to a fragmented cDNA if the read doesn't have PCR adapter sequences on both ends.
+In addition to removal of reads that belong to fragmented cDNAs, NTproc rotates reads such that their poly-A tails become on the right (3') end of reads. Also, NTproc trims adapters and performs demultiplexing.<br><br>
 
 ### Installation
 Simply download the files using the command<br>
