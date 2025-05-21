@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #See github.com/shelkmike/NTproc
-ntproc_version=1.2
+ntproc_version=1.3
 
 #######################################
 #Step 0. Getting command line arguments and checking whether all required programs are in $PATH.
@@ -60,7 +60,7 @@ if [[ $path_to_the_input_fastq =~ ^"empty"$ ]] || [[ $pcr_adapter_sequence =~ ^"
 	cat << EOF
 ###########################################
 Mandatory options:
-1) --fastq - path to a FASTQ file with unprocessed reads.
+1) --fastq - path to a FASTQ file with unprocessed reads. This file may be compressed by Gzip.
 2) --adapter - sequence of the adapter used for PCR. For details, see https://github.com/shelkmike/NTproc.
 
 ###########################################
