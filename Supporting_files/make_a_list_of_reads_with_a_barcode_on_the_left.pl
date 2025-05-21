@@ -20,7 +20,11 @@ perl /mnt/ssd/Schelkunov/Work/Run_diff/MinION_basecalling/Supplementary_scripts/
 $path_to_porechop_demultiplexing_logs=$ARGV[0];
 $path_to_the_output_list=$ARGV[1];
 
+#Загружаю файл в массив, как написано на https://stackoverflow.com/a/8963627
 open INFILE, "< $path_to_porechop_demultiplexing_logs";
+chomp(my @infile = <INFILE>);
+close INFILE;
+
 open OUTFILE, "> $path_to_the_output_list";
 
 $read_title=""; #заголовок рида, рассматриваемого сейчас.
@@ -30,7 +34,9 @@ $is_top_rated_barcode_at_the_start_or_at_the_end=""; #"nowhere", если для
 $full_score_of_the_current_top_rated_barcode=0; #full_score того баркода, у которого сейчас самый высокий рейтинг.
 
 
-while(<INFILE>)
+$line_number = 0; #Номер строки. Считается от 1.
+
+while($line_number < $#infile)
 {
 =head
 04a37e1c-00ee-47ae-8939-fcc0022726a9 runid=9351569d7a88b8016456af9ed9aeb03617c83014 sampleid=Arabidopsis_splice_map read=28342 ch=193 start_time=2020-07-12T01:24:52Z
@@ -64,13 +70,16 @@ while(<INFILE>)
 =cut
 	#по-видимому, самый простой способ определить, какой именно баркод есть в риде по результатам porechop, это выбрать тот баркод, у которого самый высокий full_score.
 	
+	$line_number += 1;
 	
-	
-	if($_=~/^(\S+ runid=.+)$/)
+	#Если следующая строка начинается с "  start:", значит эта строка содержит заголовок рида.
+	if($infile[$line_number]=~/^\s+start\:/)
 	{
 		$previous_read_title=$read_title; #заголовок предыдущего рида.
-		$read_title=$1;
+		
+		$read_title = $infile[$line_number - 1];
 		chomp($read_title);
+
 		
 		#если у прошлого рида баркод был слева, то записываю заголовок рид в файл, в котором заголовки тех ридов, которые нужно будет сделать обратно-комплементарными.
 		if($is_top_rated_barcode_at_the_start_or_at_the_end=~/start/)
@@ -84,17 +93,17 @@ while(<INFILE>)
 		$full_score_of_the_current_top_rated_barcode=0; #full_score того баркода, у которого сейчас самый высокий рейтинг.
 		
 	}
-	if($_=~/^\s+start:/)
+	if($infile[$line_number - 1]=~/^\s+start:/)
 	{
 		$are_we_currently_observing_read_start_of_read_end="start";
 	}
 	
-	if($_=~/^\s+end:/)
+	if($infile[$line_number - 1]=~/^\s+end:/)
 	{
 		$are_we_currently_observing_read_start_of_read_end="end";
 	}
 	
-	if($_=~/full score=([\d\.]+)/)
+	if($infile[$line_number - 1]=~/full score=([\d\.]+)/)
 	{
 		$full_score_in_this_string=$1;
 		if($full_score_in_this_string>$full_score_of_the_current_top_rated_barcode)
