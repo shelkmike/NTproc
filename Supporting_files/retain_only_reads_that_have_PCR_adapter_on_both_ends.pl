@@ -12,7 +12,11 @@ $path_to_the_porechop_logs=$ARGV[1];
 $path_to_the_output_fastq=$ARGV[2];
 $path_to_the_output_list=$ARGV[3];
 
+#Загружаю файл в массив, как написано на https://stackoverflow.com/a/8963627
 open PORECHOP_LOGS, "< $path_to_the_porechop_logs";
+chomp(my @porechop_logs = <PORECHOP_LOGS>);
+close PORECHOP_LOGS;
+
 open LIST_OF_READ_TITLES_FOR_READS_WITH_PCR_ADAPTER_ADAPTERS_ON_BOTH_ENDS, "> $path_to_the_output_list";
 =head
 13236cbb-82d6-4038-b5d2-aa1e75c03a6c runid=9351569d7a88b8016456af9ed9aeb03617c83014 sampleid=Arabidopsis_splice_map read=32832 ch=218 start_time=2020-07-12T01:24:41Z
@@ -36,12 +40,18 @@ open LIST_OF_READ_TITLES_FOR_READS_WITH_PCR_ADAPTER_ADAPTERS_ON_BOTH_ENDS, "> $p
 
 $read_title="";
 
-while(<PORECHOP_LOGS>)
+$line_number = 0; #Номер строки. Считается от 1.
+
+while($line_number < $#porechop_logs)
 {
-	if($_=~/^(\S+ runid=.+)$/)
+	$line_number += 1;
+	
+	#Если следующая строка начинается с "  start:", значит эта строка содержит заголовок рида.
+	if($porechop_logs[$line_number]=~/^\s+start\:/)
 	{
 		$previous_read_title=$read_title; #заголовок предыдущего рида.
-		$read_title=$1;
+		
+		$read_title = $porechop_logs[$line_number - 1];
 		chomp($read_title);
 		
 		#проверяю, были ли адаптеры PCR_adapter на начале и на конце предыдущего рида. Если "да", то печатаю начало заголовка этого рида в выходной файл.
@@ -55,21 +65,21 @@ while(<PORECHOP_LOGS>)
 		$does_this_read_have_a_PCR_adapter_adapter_at_the_end="no";
 		$are_we_currently_observing_read_start_of_read_end=""; #"start", если в данный момент скрипт читает, что было найдено в начале рида. "end" - если что в конце. "" - если пока скрипт ещё не дошёл до описания ни начала, ни конца рида.
 	}
-	if($_=~/^\s+start:/)
+	if($porechop_logs[$line_number - 1]=~/^\s+start:/)
 	{
 		$are_we_currently_observing_read_start_of_read_end="start";
 	}
 	
-	if($_=~/^\s+end:/)
+	if($porechop_logs[$line_number - 1]=~/^\s+end:/)
 	{
 		$are_we_currently_observing_read_start_of_read_end="end";
 	}
 	
-	if(($_=~/PCR_adapter/)&&($are_we_currently_observing_read_start_of_read_end=~/^start$/))
+	if(($porechop_logs[$line_number - 1]=~/PCR_adapter/)&&($are_we_currently_observing_read_start_of_read_end=~/^start$/))
 	{
 		$does_this_read_have_a_PCR_adapter_adapter_at_the_start="yes";
 	}
-	if(($_=~/PCR_adapter/)&&($are_we_currently_observing_read_start_of_read_end=~/^end$/))
+	if(($porechop_logs[$line_number - 1]=~/PCR_adapter/)&&($are_we_currently_observing_read_start_of_read_end=~/^end$/))
 	{
 		$does_this_read_have_a_PCR_adapter_adapter_at_the_end="yes";
 	}	
