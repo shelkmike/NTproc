@@ -27,7 +27,11 @@ perl /mnt/ssd/Schelkunov/Work/Run_diff/MinION_basecalling/Supplementary_scripts/
 $path_to_porechop_demultiplexing_logs=$ARGV[0];
 $path_to_the_output_list=$ARGV[1];
 
+#Загружаю файл в массив, как написано на https://stackoverflow.com/a/8963627
 open INFILE, "< $path_to_porechop_demultiplexing_logs";
+chomp(my @infile = <INFILE>);
+close INFILE;
+
 open OUTFILE, "> $path_to_the_output_list";
 
 $read_title=""; #заголовок рида, рассматриваемого сейчас.
@@ -35,7 +39,9 @@ $are_we_currently_observing_read_start_of_read_end=""; #"start", если в д�
 %hash_barcode_found_at_the_start_to_its_full_score=(); #ключ - название баркода, который был найден на левом конце, значение - его full score. При переходом к каждому новому риду этот хэш обнуляется.
 %hash_barcode_found_at_the_end_to_its_full_score=(); #ключ - название баркода, который был найден на правом конце, значение - его full score. При переходом к каждому новому риду этот хэш обнуляется.
 
-while(<INFILE>)
+$line_number = 0; #Номер строки. Считается от 1.
+
+while($line_number < $#infile)
 {
 =head
 04a37e1c-00ee-47ae-8939-fcc0022726a9 runid=9351569d7a88b8016456af9ed9aeb03617c83014 sampleid=Arabidopsis_splice_map read=28342 ch=193 start_time=2020-07-12T01:24:52Z
@@ -68,26 +74,30 @@ while(<INFILE>)
 
 =cut
 	
-	if($_=~/^(\S+ runid=.+)$/)
+	$line_number += 1;
+	
+	#Если следующая строка начинается с "  start:", значит эта строка содержит заголовок рида.
+	if($infile[$line_number]=~/^\s+start\:/)
 	{
-		$read_title=$1;
+		$read_title = $infile[$line_number - 1];
+		chomp($read_title);
 		
 		%hash_barcode_found_at_the_start_to_its_full_score=(); #ключ - название баркода, который был найден на левом конце, значение - его full score. При переходом к каждому новому риду этот хэш обнуляется.
 		%hash_barcode_found_at_the_end_to_its_full_score=(); #ключ - название баркода, который был найден на правом конце, значение - его full score. При переходом к каждому новому риду этот хэш обнуляется.
 		$are_we_currently_observing_read_start_of_read_end=""; #"start", если в данный момент скрипт читает, что было найдено в начале рида. "end" - если что в конце. "" - если пока скрипт ещё не дошёл до описания ни начала, ни конца рида.
 		
 	}
-	if($_=~/^\s+start:/)
+	if($infile[$line_number - 1]=~/^\s+start:/)
 	{
 		$are_we_currently_observing_read_start_of_read_end="start";
 	}
 	
-	if($_=~/^\s+end:/)
+	if($infile[$line_number - 1]=~/^\s+end:/)
 	{
 		$are_we_currently_observing_read_start_of_read_end="end";
 	}
 	
-	if($_=~/\s*Barcode (\d+).+full score=([\d\.]+)/)
+	if($infile[$line_number - 1]=~/\s*Barcode (\d+).+full score=([\d\.]+)/)
 	{
 		$barcode_number=$1;
 		$full_score_in_this_string=$2;
@@ -119,7 +129,7 @@ while(<INFILE>)
 		}
 	}
 	
-	if($_=~/^\s*final barcode call\:\s+(BC\d+)/)
+	if($infile[$line_number - 1]=~/^\s*final barcode call\:\s+(BC\d+)/)
 	{
 		$final_barcode_call=$1;
 		#если и в начале рида и в конце со сходством выше 75 оказался тот баркод, про который porechop решил, что именно он - баркод этого рида.
