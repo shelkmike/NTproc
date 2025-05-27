@@ -30,11 +30,13 @@ Files titled like BC01.fastq, BC02.fastq, BC03.fastq contain processed reads wit
 <br>
 To check whether NTproc works correctly, you can use a test set of 10 000 reads (file 10000_reads.fastq), provided with NTproc. Run a test with a command like<br>
 `bash ntproc.sh --fastq ./Test_set/10000_reads.fastq --adapter AAGCAGTGGTATCAACGCAGAGT --output_folder Test_results`<br>
-
+<br>
 ### Questions and answers.
 1. How **fast** is NTproc?<br>
 NTproc utilizes a single CPU thread and is capable of processing 1 million reads in approximately an hour. If a faster performance is required, you can split the input FASTQ file into batches and run several instances of NTproc independently.
 2. How much **RAM** does NTproc need?<br>
 Approximately 1 Gb RAM per 1 million reads. If you don't have enough RAM to process all reads at once, you can split the input FASTQ into batches and process them in order (not in parallel).
+<br>
+I recommend not to make batches smaller than 100 000 reads, because otherwise not all barcodes may be detected in all batches.
 <br>
 If you would like NTproc to have the capability of automatically splitting reads into batches (for speedup or for lowering RAM usage) with subsequent automatic merging of results from different batches, notify me via Issues (https://github.com/shelkmike/NTProc/issues).
