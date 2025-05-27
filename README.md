@@ -11,7 +11,7 @@ Simply download the latest release from https://github.com/shelkmike/NTproc/rele
 ### Usage
 Ntproc has two mandatory options and one additional option.<br>
 The mandatory options are:<br>
-1\) --fastq — path to a FASTQ file with unprocessed reads. This file may be compressed by Gzip.<br>
+1\) --fastq — path to a FASTQ file with reads. This file may be compressed by Gzip. It is mandatory that the input reads should not be trimmed.<br>
 2\) --adapter — a full or partial sequence of a PCR adapter used for cDNA amplification.<br>
 
 The additional option is<br>
@@ -31,5 +31,10 @@ Files titled like BC01.fastq, BC02.fastq, BC03.fastq contain processed reads wit
 To check whether NTproc works correctly, you can use a test set of 10 000 reads (file 10000_reads.fastq), provided with NTproc. Run a test with a command like<br>
 `bash ntproc.sh --fastq ./Test_set/10000_reads.fastq --adapter AAGCAGTGGTATCAACGCAGAGT --output_folder Test_results`<br>
 
-### Performance
-NTproc utilizes a single CPU thread and is capable of processing 1 000 000 reads in approximately an hour. If a faster performance is required, a user can split the input FASTQ file into batches and run several instances of NTproc independently. If you would like NTproc to have integrated parallelization, notify me via Issues (https://github.com/shelkmike/NTProc/issues).
+### Questions and answers.
+1. How **fast** is NTproc?<br>
+NTproc utilizes a single CPU thread and is capable of processing 1 million reads in approximately an hour. If a faster performance is required, you can split the input FASTQ file into batches and run several instances of NTproc independently.
+2. How much **RAM** does NTproc need?<br>
+Approximately 1 Gb RAM per 1 million reads. If you don't have enough RAM to process all reads at once, you can split the input FASTQ into batches and process them in order (not in parallel).
+<br>
+If you would like NTproc to have the capability of automatically splitting reads into batches (for speedup or for lowering RAM usage) with subsequent automatic merging of results from different batches, notify me via Issues (https://github.com/shelkmike/NTProc/issues).
